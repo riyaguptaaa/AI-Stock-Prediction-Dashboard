@@ -50,3 +50,4 @@ Thumbs.db
 # Exported HTML or PDF versions of notebooks
 *.html
 *.pdf
+fix.py
