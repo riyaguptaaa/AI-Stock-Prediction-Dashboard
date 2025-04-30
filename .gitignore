@@ -1,0 +1,52 @@
+# ========================
+# Python cache and metadata
+# ========================
+__pycache__/
+*.py[cod]
+*.log
+*.tmp
+
+# ========================
+# Jupyter Notebook
+# ========================
+.ipynb_checkpoints/
+
+# ========================
+# Environment & dependency files
+# ========================
+.env
+.venv/
+venv/
+myenv/
+
+# ========================
+# OS-specific files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# VSCode and IDE settings
+# ========================
+.vscode/
+.idea/
+
+# ========================
+# Model files & scalers
+# ========================
+# models/
+# scalers/
+
+# ========================
+# Data outputs
+# ========================
+# data/
+# *.csv
+# *.png
+
+# ========================
+# Compiled notebook exports
+# ========================
+# Exported HTML or PDF versions of notebooks
+*.html
+*.pdf
