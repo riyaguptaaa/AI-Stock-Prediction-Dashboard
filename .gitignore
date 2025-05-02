@@ -48,6 +48,6 @@ Thumbs.db
 # Compiled notebook exports
 # ========================
 # Exported HTML or PDF versions of notebooks
-*.html
-*.pdf
+# *.html
+# *.pdf
 fix.py
