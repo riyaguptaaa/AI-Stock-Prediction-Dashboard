@@ -94,18 +94,34 @@ def predict_price(ticker, historical_data):
         
         # Calculate indicators
         processed = calculate_technical_indicators(historical_data)
-        features = processed[FEATURES].tail(60)  # Last 60 days
+        features = processed[FEATURES].tail(67)  # Last 60 days
         
         # Scale features
         scaled = feature_scaler.transform(features)
         
         # Predict
-        prediction = model.predict(np.array([scaled]))
+        prediction = []
+        for i in range(0, 8):
+            sequence = scaled[i:60+i]
+            pred = model.predict(np.array([sequence]))
+            inv_pred = target_scaler.inverse_transform(pred.reshape(-1, 1))[0][0]
+            prediction.append(round(inv_pred, 2))
+
+            
+        # prediction = [round(temp[0], 2) for temp in prediction]  # Convert list of arrays to flat list of floats
+
+        # test_pred = target_scaler.inverse_transform(prediction.reshape(-1,1)).flatten()
+        test_actual = features['Close'].squeeze()
+        
+        accuracy_data = calculate_recent_accuracy(
+            pd.Series(test_actual[-7:]), 
+            pd.Series(prediction[-8:-1]))
         
         # Inverse transform
-        dummy = np.zeros((1, len(FEATURES)))
-        dummy[0, 0] = prediction[0][0]
-        return round(float(target_scaler.inverse_transform(dummy)[0, 0]), 2)
+        return {
+            'predicted': round(prediction[-1], 2),
+            'accuracy_calc' : accuracy_data
+        }
     
     except Exception as e:
         raise ValueError(f"Prediction failed: {str(e)}")
@@ -220,7 +236,31 @@ def calculate_confidence_score(reasons, analysis):
     
     return min(max(score, 30), 95)  # Keep between 30-95%
 
-def get_stock_analysis(ticker, df):
+def calculate_recent_accuracy(actual_prices, predicted_prices):
+    """Calculate accuracy metrics with trend indicator"""
+    errors = np.abs(np.array(actual_prices) - np.array(predicted_prices))
+    accuracy_percent = 100 * (1 - errors/np.array(actual_prices))
+    
+    # Calculate trends (1=up, -1=down)
+    trends = []
+    for i in range(len(predicted_prices)):
+        if i == 0:
+            # Compare first prediction to previous actual
+            trends.append(1 if predicted_prices[i] > actual_prices[i] else -1)
+        else:
+            # Compare current prediction to previous actual
+            trends.append(1 if predicted_prices[i] > actual_prices[i-1] else -1)
+    
+    return {
+        'dates': actual_prices.index.strftime('%Y-%m-%d').tolist(),
+        'actual': actual_prices.round(2).tolist(),
+        'predicted': predicted_prices.tolist(),
+        'accuracy': accuracy_percent.round(2).tolist(),
+        'avg_accuracy': round(np.mean(accuracy_percent), 2),
+        'trends': trends
+    }
+
+def get_stock_analysis(ticker, df, accuracy_data):
     """Comprehensive analysis with 3D visualization"""
     df = calculate_technical_indicators(df)
         
@@ -228,18 +268,20 @@ def get_stock_analysis(ticker, df):
     
     # Create subplots
     fig = make_subplots(
-        rows=3, cols=1,
+        rows=4, cols=1,
         shared_xaxes=False,
         vertical_spacing=0.15,
         specs=[[{"type": "scatter"}],
+               [{"type": "scatter"}],
                [{"type": "scatter"}],
                [{"type": "scatter"}]],
         subplot_titles=(
             "Price with Bollinger Bands",
             "RSI (14-day)",
             "MACD (12,26,9)",
+            "Actual vs Predicted (Last 7-Days)",
         ),
-        row_heights=[0.4, 0.2, 0.2]
+        row_heights=[0.4, 0.2, 0.2, 0.2]
     )
     
     # Price and Bollinger Bands
@@ -255,25 +297,34 @@ def get_stock_analysis(ticker, df):
         x=df.index, y=df['BB_LOWER'], name='Lower Band',
         line=dict(color='#00CC96', dash='dash')), row=1, col=1)
     
-    fig.add_hline(y=70, line_dash="dot", line_color="red", row=2, col=1)
-    fig.add_hline(y=30, line_dash="dot", line_color="green", row=2, col=1)
-    
     # RSI
     fig.add_trace(go.Scatter(
         x=df.index, y=df['RSI'], name='RSI',
         line=dict(color='#AB63FA')), row=2, col=1)
+    
+    fig.add_hline(y=70, line_dash="dot", line_color="red", row=2, col=1)
+    fig.add_hline(y=30, line_dash="dot", line_color="green", row=2, col=1)
     
     # MACD
     fig.add_trace(go.Scatter(
         x=df.index, y=df['MACD_SIGNAL'], name='MACD',
         line=dict(color='#FFA15A')), row=3, col=1)
     
+    # Actual vs Predicted
+    fig.add_trace(go.Scatter(
+        x=accuracy_data['dates'], y=accuracy_data['actual'],
+        mode='lines+markers', name='Actual'), row=4, col=1)
+
+    fig.add_trace(go.Scatter(
+        x=accuracy_data['dates'], y=accuracy_data['predicted'],
+        mode='lines+markers', name='Predicted'), row=4, col=1)
+
     # Generate 3D plot
     plot_3d = generate_3d_plot(df)
     
     # Update layout
     fig.update_layout(
-        height=1200,
+        height=1500,
         title=f"{ticker} Advanced Analysis",
         hovermode="x unified",
         template="plotly_dark"

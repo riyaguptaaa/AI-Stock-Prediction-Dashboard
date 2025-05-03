@@ -126,6 +126,55 @@
                     </div>
                 </div>
 
+                <!-- Accuracy Tracking -->
+                <div class="card mb-4 fade-in accuracy-card" style="animation-delay: 0.4s">
+                    <div class="card-header accuracy-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">
+                                <i class="fas fa-bullseye me-2"></i>Prediction Performance (Last 7-Days)
+                            </h4>
+                            <span class="badge accuracy-badge bg-{% if analysis.accuracy.avg_accuracy > 75 %}success
+                                                            {% elif analysis.accuracy.avg_accuracy > 50 %}warning
+                                                            {% else %}danger{% endif %}">
+                                Avg: {{ analysis.accuracy.avg_accuracy }}%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table accuracy-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Actual</th>
+                                        <th>Predicted</th>
+                                        <th>Accuracy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in range(7) %}
+                                    <tr>
+                                        <td>{{ analysis.accuracy.dates[i] }}</td>
+                                        <td>₹{{ analysis.accuracy.actual[i] }}</td>
+                                        <td>₹{{ analysis.accuracy.predicted[i]|round(2) }}</td>
+                                        <td style="background: rgba(
+                                            {% if analysis.accuracy.accuracy[i] > 75 %}16, 201, 129
+                                            {% elif analysis.accuracy.accuracy[i] > 50 %}245, 158, 11
+                                            {% else %}239, 68, 68{% endif %}, 0.15)">
+                                            {{ analysis.accuracy.accuracy[i] }}%
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="accuracy-chart-container">
+                            <div class="accuracy-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Fundamentals -->
                 <div class="card mb-4 fade-in" style="animation-delay: 0.4s">
                     <div class="card-header">

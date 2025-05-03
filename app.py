@@ -25,9 +25,13 @@ def predict():
         
         # Get prediction and analysis
         prediction = predict_price(ticker, df)
-        analysis = get_stock_analysis(ticker, df)
+        analysis = get_stock_analysis(ticker, df, prediction['accuracy_calc'])
+        
         analysis['confidence_score'] = calculate_confidence_score(analysis['reasons'], analysis)
         analysis['risk_score'] = calculate_risk_assessment(analysis)
+        analysis['accuracy'] = prediction['accuracy_calc']
+        
+        prediction = prediction['predicted']
         
         
         return render_template('results.html',
