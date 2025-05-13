@@ -39,6 +39,14 @@ AI-Stock-Prediction-Dashboard/
 - BAJFINANCE.NS
 - HINDUNILVR.NS
 - ITC.NS
+- AXISBANK.NS
+- HCLTECH.NS
+- KOTAKBANK.NS
+- M&MFIN.NS
+- MARUTI.NS
+- NTPC.NS
+- SUNPHARMA.NS
+- ULTRACEMCO.NS
 
 ---
 
@@ -56,6 +64,14 @@ AI-Stock-Prediction-Dashboard/
 | BAJFINANCE.NS  | 105.49| 142.23| 0.9637   |
 | HINDUNILVR.NS  | 30.82 | 41.29 | 0.9626   |
 | ITC.NS         | 4.82  | 6.65  | 0.9617   |
+| AXISBANK.NS    | 17.61 | 23.40 | 0.9206   |
+| HCLTECH.NS     |       |       |          |
+| KOTAKBANK.NS   |       |       |          |
+| M&MFIN.NS      |       |       |          |
+| MARUTI.NS      |       |       |          |
+| NTPC.NS        |       |       |          |
+| SUNPHARMA.NS   |       |       |          |
+| ULTRACEMCO.NS  |       |       |          |
 
 ---
 
