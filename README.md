@@ -65,13 +65,13 @@ AI-Stock-Prediction-Dashboard/
 | HINDUNILVR.NS  | 30.82 | 41.29 | 0.9626   |
 | ITC.NS         | 4.82  | 6.65  | 0.9617   |
 | AXISBANK.NS    | 17.61 | 23.40 | 0.9206   |
-| HCLTECH.NS     |       |       |          |
-| KOTAKBANK.NS   |       |       |          |
-| M&MFIN.NS      |       |       |          |
-| MARUTI.NS      |       |       |          |
-| NTPC.NS        |       |       |          |
-| SUNPHARMA.NS   |       |       |          |
-| ULTRACEMCO.NS  |       |       |          |
+| HCLTECH.NS     | 30.55 | 40.20 | 0.9378   |
+| KOTAKBANK.NS   | 25.75 | 35.37 | 0.9206   |
+| M&MFIN.NS      | 5.15  | 6.53  | 0.9044   |
+| MARUTI.NS      | 165.15| 219.27| 0.8732   |
+| NTPC.NS        | 9.54  | 11.61 | 0.9049   |
+| SUNPHARMA.NS   | 31.14 | 39.01 | 0.9162   |
+| ULTRACEMCO.NS  | 185.72| 242.09| 0.6746   |
 
 ---
 
